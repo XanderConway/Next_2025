@@ -18,7 +18,7 @@
 //------------------------------------------------------------------------
 // Example data....
 //------------------------------------------------------------------------
-CSimpleSprite *testSprite;
+CSimpleSprite* testSprite;
 enum
 {
 	ANIM_FORWARDS,
@@ -42,7 +42,7 @@ void Init()
 	testSprite->CreateAnimation(ANIM_LEFT, speed, { 8,9,10,11,12,13,14,15 });
 	testSprite->CreateAnimation(ANIM_RIGHT, speed, { 16,17,18,19,20,21,22,23 });
 	testSprite->CreateAnimation(ANIM_FORWARDS, speed, { 24,25,26,27,28,29,30,31 });
-	testSprite->SetScale(5.0f);
+	testSprite->SetScale(1.0f);
 	//------------------------------------------------------------------------
 }
 
@@ -71,14 +71,14 @@ void Update(const float deltaTime)
 		x -= 1.0f;
 		testSprite->SetPosition(x, y);
 	}
-    if (App::GetController().GetLeftThumbStickY() > 0.5f)
-    {
-        testSprite->SetAnimation(ANIM_FORWARDS);
-        float x, y;
-        testSprite->GetPosition(x, y);
-        y += 1.0f;
-        testSprite->SetPosition(x, y);
-    }
+	if (App::GetController().GetLeftThumbStickY() > 0.5f)
+	{
+		testSprite->SetAnimation(ANIM_FORWARDS);
+		float x, y;
+		testSprite->GetPosition(x, y);
+		y += 1.0f;
+		testSprite->SetPosition(x, y);
+	}
 	if (App::GetController().GetLeftThumbStickY() < -0.5f)
 	{
 		testSprite->SetAnimation(ANIM_BACKWARDS);
@@ -126,7 +126,7 @@ void Update(const float deltaTime)
 // See App.h 
 //------------------------------------------------------------------------
 void Render()
-{	
+{
 	//------------------------------------------------------------------------
 	// Example Sprite Code....
 	testSprite->Draw();
@@ -160,15 +160,16 @@ void Render()
 	//------------------------------------------------------------------------
 	// Example Triangle Drawing.
 	//------------------------------------------------------------------------
-	App::DrawTriangle(600.0f, 300.0f, 650.0f, 400.0f, 700.0f, 300.0f, 0.0f, 1.0f, 1.0f);
-	App::DrawTriangle(800.0f, 300.0f, 850.0f, 400.0f, 900.0f, 300.0f, 0.0f, 1.0f, 1.0f, true);
+	App::DrawTriangle(600.0f, 300.0f, -1, 1, 650.0f, 400.0f, 0, 1, 700.0f, 300.0f, 0, 1, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
+	App::DrawTriangle(500.0f, 300.0f, 0, 1, 550.0f, 450.0f, 0.5, 1, 700.0f, 340.0f, -0.5, 1, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	App::DrawTriangle(800.0f, 300.0f, 0, 1, 850.0f, 400.0f, 0, 1, 900.0f, 300.0f, 0, 1, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, true);
 }
 //------------------------------------------------------------------------
 // Add your shutdown code here. Called when the APP_QUIT_KEY is pressed.
 // Just before the app exits.
 //------------------------------------------------------------------------
 void Shutdown()
-{	
+{
 	//------------------------------------------------------------------------
 	// Example Sprite Code....
 	delete testSprite;
