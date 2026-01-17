@@ -18,6 +18,9 @@
 #include "../Game/Utils/ReadObj.h"
 
 #include "../Game/Camera.h"
+#include "../Game/Engine/GameObject.h"
+
+#include <vector>
 
 //------------------------------------------------------------------------
 // Example data....
@@ -32,8 +35,8 @@ enum
 };
 //------------------------------------------------------------------------
 
-Model suzanne;
-Camera cam(0, 1000);
+
+std::vector<GameObject*> gameObjectScenes;
 
 
 //------------------------------------------------------------------------
@@ -52,7 +55,24 @@ void Init()
 	testSprite->CreateAnimation(ANIM_FORWARDS, speed, { 24,25,26,27,28,29,30,31 });
 	testSprite->SetScale(1.0f);
 
-	suzanne = readFromFile("./data/TestData/suzanne.obj");
+	GameObject *MainCamera = new GameObject();
+	Camera *cam = new Camera(0, 1000);
+	MainCamera->addComponent(cam);
+	MainCamera->rot.y += 180;
+
+	GameObject *go = new GameObject();;
+	Model suzanne = readFromFile("./data/TestData/suzanne.obj");
+	go->addComponent(new MeshRenderer(*cam, suzanne));
+
+	gameObjectScenes.push_back(go);
+	gameObjectScenes.push_back(MainCamera);
+
+	for (GameObject *g : gameObjectScenes) {
+		for (Component *c : g->components) {
+			c->Start();
+		}
+	}
+
 	//------------------------------------------------------------------------
 }
 
@@ -65,21 +85,10 @@ void Update(const float deltaTime)
 	//------------------------------------------------------------------------
 	// Example Sprite Code....
 	testSprite->Update(deltaTime);
-	if (App::GetController().GetLeftThumbStickX() > 0.5f)
-	{
-		cam.yaw += 0.1f;
-	}
-	if (App::GetController().GetLeftThumbStickX() < -0.5f)
-	{
-		cam.yaw -= 0.1f;
-	}
-	if (App::GetController().GetLeftThumbStickY() > 0.5f)
-	{
-		cam.pos = cam.pos + Vec3<float>({0, 0, 2});
-	}
-	if (App::GetController().GetLeftThumbStickY() < -0.5f)
-	{
-		cam.pos = cam.pos - Vec3<float>({ 0, 0, 2});
+	for (GameObject* g : gameObjectScenes) {
+		for (Component* c : g->components) {
+			c->Update(deltaTime);
+		}
 	}
 
 }
@@ -90,9 +99,15 @@ void Update(const float deltaTime)
 //------------------------------------------------------------------------
 void Render()
 {
+
+
+	for (GameObject* g : gameObjectScenes) {
+		for (Component* c : g->components) {
+			c->Render();
+		}
+	}
 	// Render Suzanne
-	cam.UpdateViewMat();
-	cam.Render(suzanne);
+	//cam.Render(suzanne);
 }
 //------------------------------------------------------------------------
 // Add your shutdown code here. Called when the APP_QUIT_KEY is pressed.

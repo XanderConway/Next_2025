@@ -1,8 +1,9 @@
 // Class for a camera, which is used to render models
 #include "../Game/Camera.h"
+#include "../Game/Engine/GameObject.h"
 #include "../ContestAPI/app.h"
 
-Camera::Camera(float n, float f) : nearPlane(n), farPlane(f), pitch(0), yaw(0) {
+Camera::Camera(float n, float f) : nearPlane(n), farPlane(f) {
 	this->projMat = Matrix4x4({
 		{1064, 0, 0, 0},
 		{0, 768, 0, 0},
@@ -13,6 +14,9 @@ Camera::Camera(float n, float f) : nearPlane(n), farPlane(f), pitch(0), yaw(0) {
 
 // Update the Camera's view matrix based on it's current position, yaw and pitch
 void Camera::UpdateViewMat() {
+	float yaw = go->rot.y;
+	float pitch = go->rot.x;
+
 
 	// (0, 0, 1) rotated by yaw and pitch
 	Vec3<float> forward;
@@ -38,7 +42,7 @@ void Camera::UpdateViewMat() {
 }
 
 Vec3<float> Camera::WorldToCameraSpace(Vec3<float> v) {
-	return this->viewMat.mul(v - this->pos);
+	return this->viewMat.mul(v - this->go->position);
 }
 
 Vec3<float> Camera::CameraToClipSpace(Vec3<float> v) {
@@ -47,7 +51,8 @@ Vec3<float> Camera::CameraToClipSpace(Vec3<float> v) {
 	return o;
 }
 
-void Camera::Render(Model m) {
+void Camera::RenderModel(Model m) {
+
 	for (Face f : m.faces) {
 
 		float s = 50;
@@ -62,6 +67,8 @@ void Camera::Render(Model m) {
 
 		// Object to World Space
 
+
+
 		// World to Camera Space
 		v1 = this->WorldToCameraSpace(v1);
 		v2 = this->WorldToCameraSpace(v2);
@@ -75,6 +82,27 @@ void Camera::Render(Model m) {
 		// Camera to Clip Space
 
 		App::DrawTriangle(v1.x, v1.y, v1.z, v1.w, v2.x, v2.y, v2.z, v2.w, v3.x, v3.y, v3.z, v3.w, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
-		//App::DrawTriangle((v1.x / v1.z) * s + trans.x, (v1.y / v1.z) * s + trans.y, 0, 1, (v2.x / v1.z) * s + trans.x, v2.y * s + trans.y, 0, 1, v3.x * s + trans.x, v3.y * s + trans.y, 0, 1, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
+	}
+}
+
+
+void Camera::Update(float deltaTime) {
+	UpdateViewMat();
+
+	if (App::GetController().GetLeftThumbStickX() > 0.5f)
+	{
+		go->rot.y += 0.1f;
+	}
+	if (App::GetController().GetLeftThumbStickX() < -0.5f)
+	{
+		go->rot.y -= 0.1f;
+	}
+	if (App::GetController().GetLeftThumbStickY() > 0.5f)
+	{
+		go->position = go->position + Vec3<float>({ 0, 0, 2 });
+	}
+	if (App::GetController().GetLeftThumbStickY() < -0.5f)
+	{
+		go->position = go->position - Vec3<float>({ 0, 0, 2 });
 	}
 }
