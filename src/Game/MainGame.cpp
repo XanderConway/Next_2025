@@ -17,16 +17,15 @@
 
 #include "../Game/Utils/ReadObj.h"
 
-#include "../Game/Camera.h"
-
 #include <vector>
 
-#include "../Game/Engine/ECS/Entity/Entity.h"
-#include "../Game/Engine/ECS/Components/Transform.h"
+#include "../Game/Engine/ECS/Entity/EntityComponentSystem.h"
+#include "../Game/Engine/ECS/Components/Components.h"
 #include "../Game/Engine/ECS/Systems/MeshRenderer.h"
 #include "../Game/Engine/ECS/Systems/Spin.h"
 
 
+using namespace ECS;
 
 Scene s;
 

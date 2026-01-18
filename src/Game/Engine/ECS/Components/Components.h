@@ -3,6 +3,8 @@
 
 #pragma once
 #include "../Game/Math/Vector.h"
+#include "../Game/Utils/ReadObj.h"
+
 
 struct Position : public Vec3<float> {
 	using Vec3<float>::Vec3;

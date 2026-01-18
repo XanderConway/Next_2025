@@ -1,18 +1,18 @@
 #pragma once
 
-#include "../Game/Engine/ECS/Entity/Entity.h"
-#include "../Game/Engine/ECS/Components/Transform.h"
+#include "../Game/Engine/ECS/Entity/EntityComponentSystem.h"
+#include "../Game/Engine/ECS/Components/Components.h"
 
-struct Spin : public System {
+struct Spin : public ECS::System {
 
-	SceneView<Position, Rotation, Scale> view;
+	ECS::SceneView<Position, Rotation, Scale> view;
 
-	Spin(Scene* s) : System(s), view(s) {}
+	Spin(ECS::Scene* s) : ECS::System(s), view(s) {}
 
 	float currTime = 0;
 
 	void Update(float deltaTime) override {
-		for (EntityID e : view.entities) {
+		for (ECS::EntityID e : view.entities) {
 			Position &pos = *s->getComponent<Position>(e);
 			Rotation& rot = *s->getComponent<Rotation>(e);
 			//rot.y += deltaTime * 0.001;
