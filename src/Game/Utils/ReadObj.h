@@ -30,4 +30,4 @@ struct Model {
 	std::vector<Face> faces;
 };
 
-Model readFromFile(std::string filename);
+Model *readFromFile(std::string filename);

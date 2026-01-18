@@ -26,7 +26,7 @@ struct FaceVertHash {
 };
 
 // Read an obj file, expects the .obj format Blender outputs
-Model readFromFile(std::string filename) {
+Model *readFromFile(std::string filename) {
 	std::ifstream file(filename);
 	std::string line;
 	
@@ -98,7 +98,6 @@ Model readFromFile(std::string filename) {
 			}
 		}
 	}
-	Model m{ verticies, faces };
-	return m;
+	return new Model{ verticies, faces };
 }
 
