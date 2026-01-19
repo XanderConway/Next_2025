@@ -18,29 +18,51 @@ ComponentPool::~ComponentPool() {
 	delete[] data;
 }
 
+World::World() {
+	std::fill(idToPool, idToPool + TOTAL_COMPONENT_TYPES, -1);
+}
+
 
 // Memory pools for components
-EntityID Scene::addEntity() {
+EntityID World::addEntity() {
 	entities.push_back({ (int)entities.size(), ComponentBits() });
 	return entities.size() - 1;
 }
 
-
-void Scene::Start() {
+void World::Start() {
 	for (System* s : systems) {
 		s->Start();
 	}
 }
 
-void Scene::Update(float deltatime) {
+void World::Update(float deltatime) {
 	for (System* s : systems) {
 		s->Update(deltatime);
 	}
 }
 
-void Scene::Render() {
+void World::Render() {
 	for (System* s : systems) {
 		s->Render();
 	}
 }
+
+// Clear the worlds memory and assets
+void World::Shutdown() {
+	for (System* s : systems) {
+		s->Shutdown();
+	}
+	entities.clear();
+	for (int i = 0; i < components.size(); i++) {
+		delete components[i];
+	}
+	components.clear();
+
+	for (int i = 0; i < systems.size(); i++) {
+		delete systems[i];
+	}
+	systems.clear();
+
+}
+
 

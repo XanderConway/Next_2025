@@ -7,7 +7,7 @@ struct Spin : public ECS::System {
 
 	ECS::SceneView<Position, Rotation, Scale> view;
 
-	Spin(ECS::Scene* s) : ECS::System(s), view(s) {}
+	Spin(ECS::World* s) : ECS::System(s), view(s) {}
 
 	float currTime = 0;
 
@@ -15,13 +15,12 @@ struct Spin : public ECS::System {
 		for (ECS::EntityID e : view.entities) {
 			Position &pos = *s->getComponent<Position>(e);
 			Rotation& rot = *s->getComponent<Rotation>(e);
-			//rot.y += deltaTime * 0.001;
+			rot.y += deltaTime * 0.001;
 			rot.x += deltaTime * 0.0007;
-			//rot.z += deltaTime * 0.0005;
+			rot.z += deltaTime * 0.0005;
 
 
 			currTime += deltaTime;
-			//pos.y += sin(currTime);
 		}
 	}
 };

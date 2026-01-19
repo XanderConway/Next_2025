@@ -4,9 +4,9 @@
 struct MeshRenderer : public ECS::System {
 
 	ECS::SceneView<Position, Rotation, Scale, Mesh> view;
-	ECS::SceneView<Camera, Position, Rotation> cam;
+	ECS::SceneView<Camera, Position, Rotation> camView;
 
-	MeshRenderer(ECS::Scene* s) : ECS::System(s), view(s), cam(s) {}
+	MeshRenderer(ECS::World* s) : ECS::System(s), view(s), camView(s) {}
 
 	Matrix4x4 computeCamRotMat(ECS::EntityID camId);
 

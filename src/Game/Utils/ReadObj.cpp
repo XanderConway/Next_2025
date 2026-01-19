@@ -16,7 +16,6 @@ struct FaceVert {
 
 		return p_i == other.p_i && n_i == other.n_i && uv_i == other.uv_i;
 	}
-
 };
 
 struct FaceVertHash {

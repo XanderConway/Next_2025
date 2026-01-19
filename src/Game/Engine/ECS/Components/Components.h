@@ -4,6 +4,7 @@
 #pragma once
 #include "../Game/Math/Vector.h"
 #include "../Game/Utils/ReadObj.h"
+#include <string>
 
 
 struct Position : public Vec3<float> {
@@ -32,6 +33,8 @@ struct Camera {
 			{0, 0, 1, 0}
 		});	
 	}
+
+	Camera(Matrix4x4 projMat) : projMat(projMat) {};
 };
 
 struct Mesh {
@@ -41,7 +44,25 @@ struct Mesh {
 struct Material : public Vec3<float> {
 	using Vec3<float>::operator*;
 	using Vec3<float>::operator=;
+
 	bool backFaceCull = false;
-	Material(float r, float g, float b, bool cull) : Vec3<float>(r, g, b), backFaceCull(cull) {};
+	bool lit = true;
+	bool wireframe = false;
+
+	Material(float r, float g, float b) : Vec3<float>(r, g, b), backFaceCull(false), lit(false), wireframe(false) {};
+	Material(float r, float g, float b, bool cull, bool lit, bool wireframe) : Vec3<float>(r, g, b), backFaceCull(cull), lit(lit), wireframe(wireframe) {};
 };
+
+struct Text {
+	char* text;
+	int x;
+	int y;
+	void* font;
+
+	Text(char *text, int x, int y, void* font) : text(text), x(x), y(y), font(font) {};
+};
+
+struct Player {};
+
+struct GoalPerspective {};
 

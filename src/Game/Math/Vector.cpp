@@ -1,5 +1,9 @@
 #include "../Game/Math/Vector.h"
 #include "../Game/Utils/ReadObj.h"
+#include <cmath>
+#include <random>
+
+const unsigned int SEED = 99;
 
 Vec3<float> cross(const Vec3<float> v1, const Vec3<float> v2) {
 	Vec3<float> out;
@@ -13,6 +17,18 @@ Vec3<float> cross(const Vec3<float> v1, const Vec3<float> v2) {
 // Note, w components are not included in the dot product
 float dot(const Vec3<float> v1, const Vec3<float> v2) {
 	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+float norm(const Vec3<float> v) {
+	return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+Vec3<float> getRand(float min, float max) {
+	static std::random_device rd;
+	static std::mt19937 eng(99);
+	std::uniform_real_distribution<float> dist(min, max);
+
+	return Vec3<float>(dist(eng), dist(eng), dist(eng));
 }
 
 Vec3<float> Matrix4x4::mul(const Vec3<float> v) const {
