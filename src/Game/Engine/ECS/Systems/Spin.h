@@ -13,13 +13,11 @@ struct Spin : public ECS::System {
 
 	void Update(float deltaTime) override {
 		for (ECS::EntityID e : view.entities) {
-			Position &pos = *s->getComponent<Position>(e);
-			Rotation& rot = *s->getComponent<Rotation>(e);
+			Vec3<float> &pos = world->getComponent<Position>(e)->pos;
+			Vec3<float> &rot = world->getComponent<Rotation>(e)->rot;
 			rot.y += deltaTime * 0.001;
 			rot.x += deltaTime * 0.0007;
 			rot.z += deltaTime * 0.0005;
-
-
 			currTime += deltaTime;
 		}
 	}

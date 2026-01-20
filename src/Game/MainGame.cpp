@@ -38,15 +38,18 @@ SceneManager& manager = SceneManager::getInstance();
 //------------------------------------------------------------------------
 void Init()
 {
-	MainMenu *m = new MainMenu;
-	Level1 *l1 = new Level1;
+	MainMenu* menuLevel = new MainMenu;
+	Tutorial* tutorialLevel = new Tutorial;
+	Station* stationLevel = new Station;
+	Observatory* obervatoryLevel = new Observatory;
+	EndScreen* endScreen = new EndScreen;
 
-	manager.scenes.push_back(m);
-	manager.scenes.push_back(l1);
+	manager.scenes.push_back(menuLevel);
+	manager.scenes.push_back(tutorialLevel);
+	manager.scenes.push_back(stationLevel);
+	manager.scenes.push_back(obervatoryLevel);
+	manager.scenes.push_back(endScreen);
 	manager.requestSceneLoad(0);
-
-
-	//------------------------------------------------------------------------
 }
 
 //------------------------------------------------------------------------
@@ -55,10 +58,7 @@ void Init()
 //------------------------------------------------------------------------
 void Update(const float deltaTime)
 {
-	//------------------------------------------------------------------------
-	// Example Sprite Code....
 	manager.Update(deltaTime);
-	//s.Update(deltaTime);
 
 }
 
@@ -68,12 +68,7 @@ void Update(const float deltaTime)
 //------------------------------------------------------------------------
 void Render()
 {	//------------------------------------------------------------------------
-
-	// Render Suzanne
-	//cam.Render(suzanne);
 	manager.Render();
-
-	//s.Render();
 }
 //------------------------------------------------------------------------
 // Add your shutdown code here. Called when the APP_QUIT_KEY is pressed.
@@ -81,8 +76,6 @@ void Render()
 //------------------------------------------------------------------------
 void Shutdown()
 {
-	//------------------------------------------------------------------------
-	// Example Sprite Code....
-	//------------------------------------------------------------------------
+
 	manager.Shutdown();
 }

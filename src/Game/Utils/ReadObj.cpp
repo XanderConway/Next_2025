@@ -25,10 +25,10 @@ struct FaceVertHash {
 };
 
 // Read an obj file, expects the .obj format Blender outputs
-Model *readFromFile(std::string filename) {
+Model* readFromFile(std::string filename) {
 	std::ifstream file(filename);
 	std::string line;
-	
+
 	// Avoid duplicating verticies by making one vert for identical (v/uv/n) triplets
 	std::unordered_map<FaceVert, int, FaceVertHash> vertMap;
 
@@ -50,7 +50,7 @@ Model *readFromFile(std::string filename) {
 			std::regex faceRegex(R"(^f (\d+)/(\d+)/(\d+) (\d+)/(\d+)/(\d+) (\d+)/(\d+)/(\d+))"); // assume only triangle faces
 
 			std::smatch smatch;
-			
+
 			// Read vertex, normal or uv lines
 			if (std::regex_match(line, smatch, vertRegex)) {
 				float x = std::stof(smatch[1]);
@@ -64,7 +64,7 @@ Model *readFromFile(std::string filename) {
 				float v = std::stof(smatch[2]);
 
 				uvs.push_back(UV(u, v));
-			} 
+			}
 			else if (std::regex_match(line, smatch, normalRegex)) {
 				float x = std::stof(smatch[1]);
 				float y = std::stof(smatch[2]);

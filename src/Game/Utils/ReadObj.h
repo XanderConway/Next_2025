@@ -6,7 +6,6 @@
 
 #include "../Game/Math/Vector.h"
 
-
 template<typename T>
 struct UV {
 	T u, v;

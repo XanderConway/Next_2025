@@ -5,7 +5,7 @@
 
 namespace ECS {
 
-	const int MAX_ENTITIES = 1024;
+	const int MAX_ENTITIES = 2048;
 	const int COMPONENTS_PER_ECS = 32;
 	const int TOTAL_COMPONENT_TYPES = 128;
 
@@ -33,9 +33,9 @@ namespace ECS {
 	struct World;
 
 	struct System {
-		World* s;
+		World* world;
 
-		System(World* s) : s(s) {}
+		System(World* s) : world(s) {}
 
 		virtual void Start() {}
 		virtual void Update(float deltaTime) {}

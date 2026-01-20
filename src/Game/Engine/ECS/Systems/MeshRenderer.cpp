@@ -7,7 +7,7 @@
 using namespace ECS;
 
 Matrix4x4 MeshRenderer::computeCamRotMat(EntityID camId) {
-	Rotation& rot = *s->getComponent<Rotation>(camId);
+	Vec3<float>& rot = world->getComponent<Rotation>(camId)->rot;
 	Matrix4x4 camRotationMat;
 
 	float yaw = rot.y;
@@ -36,7 +36,7 @@ Matrix4x4 MeshRenderer::computeCamRotMat(EntityID camId) {
 }
 
 Matrix4x4 MeshRenderer::computeCamTranslationMat(EntityID camId) {
-	Position& pos = *s->getComponent<Position>(camId);
+	Vec3<float>& pos = world->getComponent<Position>(camId)->pos;
 	return Matrix4x4({ { 1, 0, 0, -pos.x }, { 0, 1, 0, -pos.y }, { 0, 0, 1, -pos.z }, { 0, 0, 0, 1 } });
 }
 
@@ -44,29 +44,29 @@ void MeshRenderer::Render() {
 	assert(camView.entities.size() > 0 && "Mesh Renderer requires a camera!");
 
 	for (EntityID camId : camView.entities) {
-		Camera& cam = *s->getComponent<Camera>(camId);
+		Camera& cam = *world->getComponent<Camera>(camId);
 		Matrix4x4 camR = computeCamRotMat(camId);
 		Matrix4x4 camT = computeCamTranslationMat(camId);
 		Matrix4x4 projetionMat = cam.projMat.mul(camR.mul(camT));
 
-		Rotation& camRot = *s->getComponent<Rotation>(camId);
-		Vec3<float> viewDir = getRotationMatrix(camRot).mul(Vec3<float>{0, 0, 1});
+		Rotation& camRot = *world->getComponent<Rotation>(camId);
+		Vec3<float> viewDir = getRotationMatrix(camRot.rot).mul(Vec3<float>{0, 0, 1});
 
 		// Default Material
 		Material material(1, 1, 1, false, true, false);
 		bool materialOverride = false;
 
-		if (s->hasComponent<Material>(camId)) {
-			material = *s->getComponent<Material>(camId);
+		if (world->hasComponent<Material>(camId)) {
+			material = *world->getComponent<Material>(camId);
 			materialOverride = true;
 		}
 
 		for (EntityID e : view.entities) {
 
-			Rotation& rot = *s->getComponent<Rotation>(e);
-			Position& pos = *s->getComponent<Position>(e);
+			Vec3<float>& rot = world->getComponent<Rotation>(e)->rot;
+			Vec3<float>& pos = world->getComponent<Position>(e)->pos;
 
-			Scale& scale = *s->getComponent<Scale>(e);
+			Scale& scale = *world->getComponent<Scale>(e);
 
 			Matrix4x4 scaleMat({
 				{scale.scale, 0, 0, pos.x},
@@ -80,10 +80,10 @@ void MeshRenderer::Render() {
 			Matrix4x4 obj2WorldMat(scaleMat.mul(rotMat));
 
 			// Transform Object Position to World Position
-			Model& m = *s->getComponent<Mesh>(e)->model;
+			Model& m = *world->getComponent<Mesh>(e)->model;
 
-			if (!materialOverride && s->hasComponent<Material>(e)) {
-				material = *s->getComponent<Material>(e);
+			if (!materialOverride && world->hasComponent<Material>(e)) {
+				material = *world->getComponent<Material>(e);
 			}
 
 			for (Face f : m.faces) {
@@ -116,13 +116,11 @@ void MeshRenderer::Render() {
 				if (material.lit) {
 					Vec3<float> lightDir(0, 1, 0.2f);
 					float light = max(dot(lightDir, worldNorm), 0.2f);
-					litMat.x *= light;
-					litMat.y *= light;
-					litMat.z *= light;
+					litMat.rgb = litMat.rgb * light;
 				}
 
 				// Camera to Clip Space
-				App::DrawTriangle(v1.x, v1.y, v1.z, v1.w, v2.x, v2.y, v2.z, v2.w, v3.x, v3.y, v3.z, v3.w, litMat.x, litMat.y, litMat.z, litMat.x, litMat.y, litMat.z, litMat.x, litMat.y, litMat.z, material.wireframe);
+				App::DrawTriangle(v1.x, v1.y, v1.z, v1.w, v2.x, v2.y, v2.z, v2.w, v3.x, v3.y, v3.z, v3.w, litMat.rgb.x, litMat.rgb.y, litMat.rgb.z, litMat.rgb.x, litMat.rgb.y, litMat.rgb.z, litMat.rgb.x, litMat.rgb.y, litMat.rgb.z, material.wireframe);
 			}
 		}
 	}

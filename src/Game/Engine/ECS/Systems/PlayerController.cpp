@@ -6,41 +6,42 @@
 using namespace ECS;
 
 void PlayerController::Update(float deltaTime) {
-
-
 	float newMouseX, newMouseY;
 	App::GetMousePos(newMouseX, newMouseY);
 
-
 	for (EntityID e : player.entities) {
 		// Rotate the player Based on WASD movement
-		Rotation &rot = *s->getComponent<Rotation>(e);
-		float lookX = App::GetController().GetLeftThumbStickX();
-		float lookY = App::GetController().GetLeftThumbStickY();
+		Vec3<float>& rot = world->getComponent<Rotation>(e)->rot;
+		float lookX = App::GetController().GetRightThumbStickX();
+		float lookY = App::GetController().GetRightThumbStickY();
 
 		rot.y += -lookX * sensitivity * deltaTime;
-		rot.x += lookY * sensitivity * 0.7f * deltaTime;
+		rot.x += lookY * sensitivity * deltaTime;
 
 		rot.x = max(rot.x, -3.14 / 8);
 		rot.x = min(rot.x, 3.14 / 8);
 
-		Position& pos = *s->getComponent<Position>(e);
-		float moveX = App::GetController().GetRightThumbStickX();
-		float moveY = App::GetController().GetRightThumbStickY();
+		Vec3<float>& pos = world->getComponent<Position>(e)->pos;
+		float moveX = App::GetController().GetLeftThumbStickX();
+		float moveY = App::GetController().GetLeftThumbStickY();
 		
 		// Orient movement vector based on where we are facing
-		Vec3<float> moveVec(moveX, 0, -moveY);
+		Vec3<float> moveVec(moveX, 0, moveY);
 		Matrix4x4 rotMat = getRotationMatrix(-rot.y, 0, 0);
 		moveVec = rotMat.mul(moveVec) * speed * deltaTime;
 		pos.x += moveVec.x;
 		pos.z += moveVec.z;
 
+		if (bounded) {
+			for (int i = 0; i < 3; i++) {
+				if (pos[i] < minBound[i]) {
+					pos[i] = minBound[i];
+				}
 
+				if (pos[i] > maxBound[i]) {
+					pos[i] = maxBound[i];
+				}
+			}
+		}
 	}
-
-
-
-
-
-	// Move the player based on keyboard input
 }

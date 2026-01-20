@@ -7,8 +7,8 @@ using namespace ECS;
 
 void TextRenderer::Render() {
 	for (EntityID e : textEntities.entities) {
-		Text t = *s->getComponent<Text>(e);
-		Material m = *s->getComponent<Material>(e);
-		App::Print(t.x, t.y, t.text, m.x, m.y, m.z, t.font);
+		Text t = *world->getComponent<Text>(e);
+		Material m = *world->getComponent<Material>(e);
+		App::Print(t.x, t.y, t.text, m.rgb.x, m.rgb.y, m.rgb.z, t.font);
 	}
 }

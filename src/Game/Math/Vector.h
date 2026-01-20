@@ -3,7 +3,6 @@
 #include <iostream>
 #include <cassert>
 
-
 template<typename T>
 struct Vec3 {
 	T x, y, z, w;
@@ -37,7 +36,8 @@ struct Vec3 {
 	}
 };
 
-Vec3<float> getRand(float min, float max);
+float getRand(float min, float max);
+Vec3<float> getRandVec(float min, float max);
 Vec3<float> cross(const Vec3<float> v1, const Vec3<float> v2);
 float dot(const Vec3<float> v1, const Vec3<float> v2);
 float norm(const Vec3<float> v);

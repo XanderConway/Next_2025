@@ -53,6 +53,8 @@ void World::Shutdown() {
 		s->Shutdown();
 	}
 	entities.clear();
+
+	// Free Memory Pool
 	for (int i = 0; i < components.size(); i++) {
 		delete components[i];
 	}
@@ -63,6 +65,7 @@ void World::Shutdown() {
 	}
 	systems.clear();
 
+	std::fill(idToPool, idToPool + TOTAL_COMPONENT_TYPES, -1);
 }
 
 

@@ -23,12 +23,15 @@ float norm(const Vec3<float> v) {
 	return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
-Vec3<float> getRand(float min, float max) {
+float getRand(float min, float max) {
 	static std::random_device rd;
 	static std::mt19937 eng(99);
 	std::uniform_real_distribution<float> dist(min, max);
+	return dist(eng);
+}
 
-	return Vec3<float>(dist(eng), dist(eng), dist(eng));
+Vec3<float> getRandVec(float min, float max) {
+	return Vec3<float>(getRand(min, max), getRand(min, max), getRand(min, max));
 }
 
 Vec3<float> Matrix4x4::mul(const Vec3<float> v) const {

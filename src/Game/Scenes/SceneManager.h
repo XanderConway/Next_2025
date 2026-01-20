@@ -15,6 +15,7 @@ struct Scene {
 
 	// Add all entities, components and systems to the Scene
 	virtual void AddAssets() {};
+	virtual void FreeAssets() {};
 
 	void InitalizeScene() {
 		if (world->entities.size() > 0) {
@@ -38,11 +39,12 @@ struct Scene {
 
 	void Shutdown() {
 		world->Shutdown();
+		FreeAssets();
 	}
 };
 
 struct SceneManager {
-	SCENE_ID currScene = 0;
+	SCENE_ID currScene = -1;
 	SCENE_ID nextScene = -1;
 	std::vector<Scene*> scenes;
 
@@ -56,22 +58,38 @@ struct SceneManager {
 		nextScene = id;
 	}
 
-	void Update(float deltaTime) {
-		if (nextScene >= 0) {
-			scenes[currScene]->Shutdown();
+	void requestNextScene() {
+		requestSceneLoad(currScene + 1);
+	}
 
+	void Update(float deltaTime) {
+
+		// Load the next scene if requestef
+		if (nextScene >= 0) {
+			if (currScene >= 0) {
+				scenes[currScene]->Shutdown();
+			}
 			currScene = nextScene;
 			scenes[currScene]->InitalizeScene();
 			nextScene = -1;
 		}
 
-		scenes[currScene]->Update(deltaTime);
+		if (currScene >= 0) {
+			scenes[currScene]->Update(deltaTime);
+		}
 	}
 	void Render() {
-		scenes[currScene]->Render();
+		if (currScene >= 0) {
+			scenes[currScene]->Render();
+		}
 	}
 
 	void Shutdown() {
-		scenes[currScene]->Shutdown();
+		if (currScene >= 0) {
+			scenes[currScene]->Shutdown();
+		}
 	}
+
+private:
+	SceneManager() : currScene(-1), nextScene(-1) {}
 };

@@ -7,17 +7,30 @@
 #include <string>
 
 
-struct Position : public Vec3<float> {
-	using Vec3<float>::Vec3;
+struct Position {
+	Vec3<float> pos;
+	Position(float x, float y, float z) : pos(x, y, z) {}
+	Position(Vec3<float> pos) : pos(pos) {}
 };
 
-struct Rotation : public Vec3<float> {
-	using Vec3<float>::Vec3;
+struct Rotation {
+	Vec3<float> rot;
+	Rotation(float x, float y, float z) : rot(x, y, z) {}
+	Rotation(Vec3<float> rot) : rot(rot) {}
 };
 
 struct Scale {
 	float scale;
 };
+
+struct Velocity {
+	Vec3<float> vel;
+};
+
+struct AngularVel {
+	Vec3<float> vel;
+};
+
 
 struct ObjToWorld {
 	Matrix4x4 mat;
@@ -41,16 +54,16 @@ struct Mesh {
 	Model* model;
 };
 
-struct Material : public Vec3<float> {
-	using Vec3<float>::operator*;
-	using Vec3<float>::operator=;
+struct Material {
+
+	Vec3<float> rgb;
 
 	bool backFaceCull = false;
 	bool lit = true;
 	bool wireframe = false;
 
-	Material(float r, float g, float b) : Vec3<float>(r, g, b), backFaceCull(false), lit(false), wireframe(false) {};
-	Material(float r, float g, float b, bool cull, bool lit, bool wireframe) : Vec3<float>(r, g, b), backFaceCull(cull), lit(lit), wireframe(wireframe) {};
+	Material(float r, float g, float b) : rgb(r, g, b), backFaceCull(false), lit(false), wireframe(false) {};
+	Material(float r, float g, float b, bool cull, bool lit, bool wireframe) : rgb(r, g, b), backFaceCull(cull), lit(lit), wireframe(wireframe) {};
 };
 
 struct Text {
@@ -65,4 +78,6 @@ struct Text {
 struct Player {};
 
 struct GoalPerspective {};
+
+struct Particle {};
 

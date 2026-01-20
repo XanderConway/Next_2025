@@ -3,9 +3,9 @@
 #include "app.h"
 
 void MenuController::Update(float deltaTime) {
-	if (App::IsKeyPressed(App::KEY_SPACE))
+	if (App::IsKeyPressed(App::KEY_SPACE) || App::GetController().CheckButton(App::BTN_A))
 	{
 		SceneManager &manager = SceneManager::getInstance();
-		manager.requestSceneLoad(manager.currScene + 1);
+		manager.requestSceneLoad(nextScene);
 	}
 }

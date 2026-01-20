@@ -2,7 +2,6 @@
 #include "../Game/Engine/ECS/Systems/MeshRenderer.h"
 #include "../Game/Engine/ECS/Systems/PlayerController.h"
 #include "../Game/Engine/ECS/Systems/CheckWin.h"
-#include "../Game/Engine/ECS/Systems/Spin.h"
 #include "../Game/Engine/ECS/Systems/TextRenderer.h"
 #include "Scenes/Levels.h"
 #include "../ContestAPI/app.h"
@@ -10,7 +9,7 @@
 
 using namespace ECS;
 
-void Level1::AddAssets() {
+void Tutorial::AddAssets() {
 
 	// The Main Cam
 	EntityID cam = world->addEntity();
@@ -47,22 +46,24 @@ void Level1::AddAssets() {
 	world->addComponent(room, Rotation(0, 0, 0));
 	world->addComponent(room, Scale{ 50 });
 	world->addComponent(room, Mesh{ roomModel });
-	world->addComponent(room, Material(1, 0, 0, false, false, true));
+	world->addComponent(room, Material(0.5, 0, 0, false, false, true));
 
 	EntityID text1 = world->addEntity();
-	world->addComponent(text1, Text(tutorialText1, 300, 100, GLUT_BITMAP_TIMES_ROMAN_24));
+	world->addComponent(text1, Text(controlsText1, 300, 100, GLUT_BITMAP_TIMES_ROMAN_24));
 	world->addComponent(text1, Material{ 1, 1, 1 });
 
-
 	EntityID text2 = world->addEntity();
-	world->addComponent(text2, Text(tutorialText2, 310, 150, GLUT_BITMAP_TIMES_ROMAN_24));
+	world->addComponent(text2, Text(controlsText2, 300, 130, GLUT_BITMAP_TIMES_ROMAN_24));
 	world->addComponent(text2, Material{ 1, 1, 1 });
 
 
+	EntityID text3 = world->addEntity();
+	world->addComponent(text3, Text(tutorialText2, 310, 170, GLUT_BITMAP_TIMES_ROMAN_24));
+	world->addComponent(text3, Material{ 1, 1, 1 });
 
 
 	// Register Systems
-	world->systems.push_back(new PlayerController(world));
+	world->systems.push_back(new PlayerController(world, Vec3<float>(-25, -25, -25), Vec3<float>(25, 25, 25)));
 	world->systems.push_back(new CheckWin(world));
 	world->systems.push_back(new MeshRenderer(world));
 	world->systems.push_back(new TextRenderer(world));

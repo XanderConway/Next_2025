@@ -16,7 +16,7 @@ void MainMenu::AddAssets() {
 	world->addComponent(title, Material{ 1, 1, 1 });
 
 	EntityID start = world->addEntity();
-	world->addComponent(start, Text(startText, 1064 / 2, 350, GLUT_BITMAP_TIMES_ROMAN_24));
+	world->addComponent(start, Text(startText, 400, 350, GLUT_BITMAP_TIMES_ROMAN_24));
 	world->addComponent(start, Material{1, 1, 1});
 
 	Model* cubeModel = readFromFile("./data/TestData/room.obj");
@@ -43,9 +43,9 @@ void MainMenu::AddAssets() {
 
 	for (int i = 0; i < 100; i++) {
 
-		Vec3<float> p = getRand(-100, 100);
-		Vec3<float> r = getRand(0, 6);
-		Vec3<float> s = getRand(0.5, 1);
+		Vec3<float> p = getRandVec(-100, 100);
+		Vec3<float> r = getRandVec(0, 6);
+		Vec3<float> s = getRandVec(0.5, 1);
 
 		EntityID cube = world->addEntity();
 		world->addComponent(cube, Position(p.x, p.y, p.z));
@@ -56,7 +56,7 @@ void MainMenu::AddAssets() {
 	}
 
 	world->systems.push_back(new MeshRenderer(world));
-	world->systems.push_back(new MenuController(world));
+	world->systems.push_back(new MenuController(world, 1));
 	world->systems.push_back(new TextRenderer(world));
 	world->systems.push_back(new Spin(world));
 
